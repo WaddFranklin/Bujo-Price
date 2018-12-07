@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<meta charset="utf-8">
+		<title>BUJO PRICE</title>
+		<style>
+
+			* {
+				font-family: "Arial";
+			}
+			span {
+				font-size: 0.8em
+			}
+			h1 {
+				margin: 0;
+				font-family: "Comic Sans MS", cursive, sans-serif;
+				font-size: 1.5em;
+				text-align: center;
+			}
+			p {
+				margin-top: 8px;
+				margin-bottom: 0;
+				margin-right: 0;
+				margin-left: 0;
+				font-weight: bold;
+				font-family: "Georgia";
+			}
+			.btn {
+				font-family: "Georgia";
+				font-size: 14px;
+				font-weight: 700;
+				text-transform: uppercase;
+				border: none;
+				padding: 10px;
+				cursor: pointer;
+				display: inline-block;
+				text-decoration: none;
+				border-radius: 5px;
+			}
+			.btn-blue {
+				background: #a3e2c8;
+				color: #000;
+				box-shadow: 0 5px 0 #8BBFA9;
+			}
+			.btn-blue:hover {
+				background: #8BBFA9;
+				color: #fff;
+				box-shadow: 0 5px 0 #6F9987;
+			}
+			.btn-blue:active {
+				position: relative;
+				top: 5px;
+				box-shadow: none;
+			}
+			#preco-material{
+				display: inline;
+			}
+			#preco-sugerido {
+				display: inline;
+			}
+			.application {
+				border: 1px solid #000;
+				border-radius: 5px;
+				margin: 10px auto;
+				width: 300px;
+				padding: 0 10px 10px 10px;
+				background-color: #EDB6BC;
+			}
+			.full-width {
+				width: 100%;
+			}
+			.enc {
+				border: 1px solid #999;
+				background-color: #A3E2C8;
+			}
+			.center {
+				text-align: center;
+				margin-top: 9px;
+			}
+		</style>
+
+		<script>
+			function calculaPrecoMarcador(tam_folha) {
+				if (tam_folha == "A5") {
+					return (0.0022 * 33);
+				}
+				else if (tam_folha == "A6") {
+					return (0.0022 * 27);
+				}
+			};
+
+			function calculaPrecoLinha(tam_folha, num_folha) {
+				if (tam_folha == "A5") {
+					return (((num_folha / 5) + 3) * 0.21 * 0.058 * 2);
+				}
+				else if (tam_folha == "A6") {
+					return (((num_folha / 5) + 3) * 0.15 * 0.058 * 2);
+				}
+			};
+
+			function calculaPrecoRevestimento(tam_folha) {
+				if (tam_folha == "A5") {
+					return 0.61;
+				}
+				else if (tam_folha == "A6") {
+					return 0.37;
+				}
+			};
+
+			function calculaPrecoElastico(tam_folha) {
+				if (tam_folha == "A5") {
+					return 0.25;
+				}
+				else if (tam_folha == "A6") {
+					return 0.19;
+				}
+			};
+
+			function calculaPrecoCapa(tam_folha) {
+				if (tam_folha == "A5") {
+					return 1 * 1.73;
+				}
+				else if (tam_folha == "A6") {
+					return 0.5 * 1.73;
+				}
+			};
+
+			function getRadioValue(name) {
+				var radios = document.getElementsByName(name);
+				var i;
+				var length = radios.length;
+
+				for (i = 0 ; i < length ; i++) {
+					if (radios[i].checked) {
+						return radios[i].value;
+					}
+				}
+			};
+
+			function exibeOculta() {
+				
+				var radios = document.getElementsByName("encadernacao");
+
+				if (radios[0].checked) {
+					document.getElementById("label-rev").style.display = "none";
+					document.getElementById("campo-rev").style.display = "none";
+					document.getElementById("label-marc").style.display = "inline-block";
+					document.getElementById("campo-marc").style.display = "block";
+				}
+				else {
+					document.getElementById("label-rev").style.display = "inline-block";
+					document.getElementById("campo-rev").style.display = "block";
+					document.getElementById("label-marc").style.display = "none";
+					document.getElementById("campo-marc").style.display = "none";
+				}
+			};
+
+			function calcularPreco () {
+				var num_folha = parseFloat(document.getElementById("num_folha").value);
+				var tam_folha = getRadioValue("tamanho");
+				var gram_folha = getRadioValue("gramatura");
+				var tipo_folha = getRadioValue("tipo-folha");
+				var encadernacao = getRadioValue("encadernacao");
+				var elastico = getRadioValue("elastico");
+				var marcador = getRadioValue("marcador");
+				var revestimento = getRadioValue("revestimento");
+				var preco_impressao = 0.0
+				var folha_de_acabamento = 1;
+
+				var preco = 0.0;
+
+				// numero de folhas e seu tamanho
+				if (tam_folha == "A4") {
+					num_folha *= 0.5;
+					preco += num_folha;
+					alert("ainda não implementado!");
+				}
+				else if (tam_folha == "A5") {
+					num_folha *= 0.5;
+					preco += num_folha;
+				}
+				else {
+					folha_de_acabamento *= 0.5;
+					num_folha *= 0.25;
+					preco += num_folha;
+				}
+
+				// preco pela gramatura
+				if (gram_folha == "75") {
+					folha_de_acabamento *= 0.08;
+					preco *= 0.08;
+				}
+				else if (gram_folha == "120") {
+					folha_de_acabamento *= 0.2;
+					preco *= 0.2;
+				}
+				else if (gram_folha == "150") {
+					folha_de_acabamento *= 0.35;
+					preco *= 0.35;
+				}
+
+				// preco pelo tipo de folha
+				if (tipo_folha != "branca") {
+					preco_impressao = (num_folha * 0.2 * 2);
+				}
+
+				// preco por encadernacao, revestimento e marcador de paginas
+				if (encadernacao == "copta") {
+					if (revestimento == "sim") {
+						preco += calculaPrecoRevestimento(tam_folha);
+					}
+				}
+				else if (encadernacao == "lombada") {
+					preco += calculaPrecoRevestimento(tam_folha);
+
+					if (marcador == "sim") {
+						preco += calculaPrecoMarcador(tam_folha);
+					}
+				}
+
+				// preco do elastico
+				if (elastico == "sim") {
+					preco += calculaPrecoElastico(tam_folha);
+				}
+
+				preco += calculaPrecoCapa(tam_folha);
+				preco += calculaPrecoLinha(tam_folha, num_folha);
+				preco += folha_de_acabamento;
+
+				document.getElementById("preco-material").innerHTML = "R$ "+ preco.toFixed(2);
+				
+				preco = Math.ceil((preco * 2) + preco_impressao);
+				document.getElementById("preco-sugerido").innerHTML = "R$ "+ preco.toFixed(2);
+				//alert(preco);
+			};
+
+			function limpaCampos() {
+				document.getElementById("preco-material").innerHTML = 'R$ 0.00';
+				document.getElementById("preco-sugerido").innerHTML = 'R$ 0.00';
+
+				document.getElementById("label-rev").style.display = "none";
+				document.getElementById("campo-rev").style.display = "none";
+				document.getElementById("label-marc").style.display = "inline-block";
+				document.getElementById("campo-marc").style.display = "block";
+			}
+		</script>
+	</head>
+	<body>
+		<div class="application">
+			<h1>Bujo Price</h1>
+			<form method="get">
+				<p style="margin-top: 0;">Número de folhas:</p>
+				<input type="number" class="full-width enc" name="numero-folha" id="num_folha" min="10" max="200" required value="50">
+
+				<p>Tamanho:</p>
+				<div class="full-width enc" id="tam_folha">
+					<input type="radio" name="tamanho" value="A4">A4
+					<input type="radio" name="tamanho" value="A5" checked="">A5
+					<input type="radio" name="tamanho" value="A6">A6
+				</div>
+
+				<p>Gramatura:</p>
+				<div class="full-width enc" id="gram_folha">
+					<input type="radio" name="gramatura" value="75">75 g/m²
+					<input type="radio" name="gramatura" value="120" checked>120 g/m²
+					<input type="radio" name="gramatura" value="150">150 g/m²
+				</div>
+
+				<p>Tipo de folha:</p>
+				<div class="full-width enc" id="tipo_folha">
+					<input type="radio" name="tipo-folha" value="branca" checked>Branca <br>
+					<input type="radio" name="tipo-folha" value="pautada">Pautada </br>
+					<input type="radio" name="tipo-folha" value="quadriculada">Quadriculada <br>
+					<input type="radio" name="tipo-folha" value="pontilhada">Pontilhada <br>
+				</div>
+
+				<p>Encadernação:</p>
+				<div class="full-width enc" onchange="exibeOculta()">
+					<input type="radio" name="encadernacao" value="lombada" checked> Lombada quadrada<br>
+					<input type="radio" name="encadernacao" value="copta"> Copta
+				</div>
+
+				<p>Elástico:</p>
+				<div class="full-width enc">
+					<input type="radio" name="elastico" value="nao" checked> Não
+					<input type="radio" name="elastico" value="sim"> Sim
+				</div>
+
+				<p id="label-rev" style="display: none;">Revestimento:</p>
+				<div class="full-width enc" id="campo-rev" style="display: none;">
+					<input type="radio" name="revestimento" value="nao" checked> Não
+					<input type="radio" name="revestimento" value="sim"> Sim<br>
+				</div>
+
+				<p id="label-marc">Marcador de páginas:</p>
+				<div class="full-width enc" id="campo-marc">
+					<input type="radio" name="marcador" value="nao" checked> Não
+					<input type="radio" name="marcador" value="sim"> Sim
+				</div>
+				
+				<div class="full-width center">
+					<input type="button" class="btn btn-blue" name="calcular" value="Calcular" onclick="calcularPreco()">
+					<input type="reset" class="btn btn-blue" name="reset" value="Limpar" onclick="limpaCampos()"><br><br>
+					<div class="full-width enc" style="padding: 2px 0;">
+						Valor gasto: <p id="preco-material">R$ 0.00</p><br>	
+						Valor sugerido: <p id="preco-sugerido">R$ 0.00</p>
+					</div>
+					<span>Developed by Wadd Franklin</span>
+				</div>
+			</form>
+		</div>
+	</body>
+</html>
